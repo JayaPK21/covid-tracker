@@ -1,5 +1,12 @@
 .App {
   text-align: center;
+  background-color: #1e2c49;
+  min-height: 100vh;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.font-cursive{
+  font-family: cursive;
 }
 
 .App-logo {
@@ -14,7 +21,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #1e2c49;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
