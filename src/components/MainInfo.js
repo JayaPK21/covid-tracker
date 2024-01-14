@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from 'axios';
 import { BrowserRouter as Router, Route, Routes, NavLink } from 'react-router-dom';
 import DisplayData from "./DisplayData";
@@ -11,12 +11,14 @@ import { setDataInfo } from "../state/datainfo";
 
 function MainInfo() {
     
-    const datainfo = useSelector(state => state.datainfo)
+    const [selectRegion, setSelectRegion] = useState("");
+    const datainfo = useSelector(state => state.datainfo);
     const dispatch = useDispatch();
 
     const handleRegionChange = (event) => {
         const newRegion = event.target.value;
         console.log("Selected Region: " + newRegion);
+        setSelectRegion(newRegion);
         dispatch(setDataInfo({ ...datainfo, regionName: newRegion }))
     }
 
@@ -41,7 +43,7 @@ function MainInfo() {
 
         const
             AreaType = "region",
-            AreaName = "South West";
+            AreaName = selectRegion;
 
         const
             filters = [
@@ -66,7 +68,7 @@ function MainInfo() {
         const first30Records = result.data.slice(0, 30);
         console.log(first30Records);
 
-        dispatch(setDataInfo({ ...datainfo, data: first30Records }))
+        dispatch(setDataInfo({ ...datainfo, data: first30Records }));
 
     };  // main
     
@@ -88,13 +90,13 @@ function MainInfo() {
                             id="selectRegion"
                             className="form-select my-4" 
                             aria-label="Default select example"
-                            value={datainfo.regionName}
+                            value={selectRegion}
                             onChange={(event) => handleRegionChange(event)}
                             >
-                            <option defaultValue="">Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                            <option defaultValue=""></option>
+                            <option value="South West">South West</option>
+                            <option value="North West">North West</option>
+                            <option value="South East">South East</option>
                         </select>
 
                         <NavLink to="chart">

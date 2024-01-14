@@ -18,7 +18,7 @@ function TableData() {
     return(
         <>
             <div className="p-2 px-5">
-                <h5 className="text-white">Following table lists the daily cases of Covid-19 registered over a period of one month in the {datainfo.regionName} region of UK.</h5>
+                <h5 className="text-white">Following table lists the daily cases of Covid-19 registered over a period of one month in the {datainfo.data[0].name} region of UK.</h5>
                 <p className="text-white">Records with more than 100 daily cases are highlighted.</p>
                 <table className="table m-4 table-info table-striped table-hover">
                     <thead>
