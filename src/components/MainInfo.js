@@ -7,6 +7,14 @@ import GraphData from './GraphData';
 
 function MainInfo() {
     const [data, setData] = useState(null);
+    const [regionName, setRegionName] = useState("");
+
+    const handleRegionChange = (event) => {
+        const newRegion = event.target.value;
+        console.log("Selected Region: " + newRegion);
+        setRegionName(newRegion);
+    }
+
     const getData = async ( queries ) => {
 
         const endpoint = 'https://api.coronavirus.data.gov.uk/v1/data';
@@ -71,6 +79,19 @@ function MainInfo() {
                         <h5 className="card-title">Covid-19 Cases</h5>
                         <p className="card-text">Welcome to this page where you can know how cases of Covid-19 have been changing over time in a region in UK.</p>
                         <p>Please select your region from the list below:</p>
+                        <select 
+                            id="selectRegion"
+                            className="form-select" 
+                            aria-label="Default select example"
+                            value={regionName}
+                            onChange={(event) => handleRegionChange(event)}
+                            >
+                            <option defaultValue="">Open this select menu</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+
                         <NavLink to="chart">
                             <button type="button" onClick={handleData} className="btn btn-light">
                                 Get Data
@@ -81,6 +102,7 @@ function MainInfo() {
                 <div className="w-75 mx-4">
                     {data ? <DisplayData /> : <></>}
                     <Routes>
+                        <Route path="covid-tracker" element={<></>} />
                         <Route path="chart" element={<GraphData />} />
                         <Route path="table" element={<TableData />} />
                     </Routes>
