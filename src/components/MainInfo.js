@@ -15,6 +15,8 @@ function MainInfo() {
     const datainfo = useSelector(state => state.datainfo);
     const dispatch = useDispatch();
 
+    //const navigate = useNavigate();
+
     const handleRegionChange = (event) => {
         const newRegion = event.target.value;
         console.log("Selected Region: " + newRegion);
@@ -73,10 +75,12 @@ function MainInfo() {
     };  // main
     
     const handleData = () => {
+        dispatch(setDataInfo({ ...datainfo, data: null }));
         main().catch(err => {
             console.error(err);
             process.exitCode = 1;
         });
+        //navigate('/chart');
     };
     return(
         <Router>
@@ -110,7 +114,7 @@ function MainInfo() {
                     {datainfo.data ? <DisplayData /> : <></>}
                     <Routes>
                         <Route path="covid-tracker" element={<></>} />
-                        <Route path="chart" element={<GraphData />} />
+                        <Route path="chart" element={datainfo.data ? <GraphData /> : <></>} />
                         <Route path="table" element={<TableData />} />
                     </Routes>
                 </div>
