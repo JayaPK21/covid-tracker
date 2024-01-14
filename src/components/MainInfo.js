@@ -1,18 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 import axios from 'axios';
 import { BrowserRouter as Router, Route, Routes, NavLink } from 'react-router-dom';
 import DisplayData from "./DisplayData";
 import TableData from './TableData';
 import GraphData from './GraphData';
 
+//import useDispatch and useSElector hooks from react-redux into the form
+import { useDispatch, useSelector } from "react-redux";
+import { setDataInfo } from "../state/datainfo";
+
 function MainInfo() {
-    const [data, setData] = useState(null);
-    const [regionName, setRegionName] = useState("");
+    
+    const datainfo = useSelector(state => state.datainfo)
+    const dispatch = useDispatch();
 
     const handleRegionChange = (event) => {
         const newRegion = event.target.value;
         console.log("Selected Region: " + newRegion);
-        setRegionName(newRegion);
+        dispatch(setDataInfo({ ...datainfo, regionName: newRegion }))
     }
 
     const getData = async ( queries ) => {
@@ -46,10 +51,8 @@ function MainInfo() {
             structure = {
                 date: "date",
                 name: "areaName",
-                code: "areaCode",
                 "dailyCases": "newCasesByPublishDate",
-                "cumulativeCases": "cumCasesByPublishDate",
-                "changeInCases": "changeInNewCasesBySpecimenDate"
+                "cumulativeCases": "cumCasesByPublishDate"
             };
 
         const
@@ -60,8 +63,10 @@ function MainInfo() {
 
         const result = await getData(apiParams);
 
-        console.log(JSON.stringify(result));
-        setData(result);
+        const first30Records = result.data.slice(0, 30);
+        console.log(first30Records);
+
+        dispatch(setDataInfo({ ...datainfo, data: first30Records }))
 
     };  // main
     
@@ -81,9 +86,9 @@ function MainInfo() {
                         <p>Please select your region from the list below:</p>
                         <select 
                             id="selectRegion"
-                            className="form-select" 
+                            className="form-select my-4" 
                             aria-label="Default select example"
-                            value={regionName}
+                            value={datainfo.regionName}
                             onChange={(event) => handleRegionChange(event)}
                             >
                             <option defaultValue="">Open this select menu</option>
@@ -100,7 +105,7 @@ function MainInfo() {
                     </div>
                 </div>
                 <div className="w-75 mx-4">
-                    {data ? <DisplayData /> : <></>}
+                    {datainfo.data ? <DisplayData /> : <></>}
                     <Routes>
                         <Route path="covid-tracker" element={<></>} />
                         <Route path="chart" element={<GraphData />} />
