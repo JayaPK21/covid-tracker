@@ -12,10 +12,9 @@ import { setDataInfo } from "../state/datainfo";
 function MainInfo() {
     
     const [selectRegion, setSelectRegion] = useState("");
+    const [noDataAvailable, setNoDataAvailable] = useState(false);
     const datainfo = useSelector(state => state.datainfo);
     const dispatch = useDispatch();
-
-    //const navigate = useNavigate();
 
     const handleRegionChange = (event) => {
         const newRegion = event.target.value;
@@ -67,6 +66,12 @@ function MainInfo() {
 
         const result = await getData(apiParams);
 
+        if(!result){
+            setNoDataAvailable(true);
+            return;
+        }
+        
+        // Gets the first 30 records from the response object
         const first30Records = result.data.slice(0, 30);
         console.log(first30Records);
 
@@ -75,12 +80,13 @@ function MainInfo() {
     };  // main
     
     const handleData = () => {
+        // Setting the value of data to initial value
         dispatch(setDataInfo({ ...datainfo, data: null }));
+        setNoDataAvailable(false);
         main().catch(err => {
             console.error(err);
             process.exitCode = 1;
         });
-        //navigate('/chart');
     };
     return(
         <Router>
@@ -98,9 +104,18 @@ function MainInfo() {
                             onChange={(event) => handleRegionChange(event)}
                             >
                             <option defaultValue=""></option>
-                            <option value="South West">South West</option>
+                            <option value="East Midlands">East Midlands</option>
+                            <option value="East of England">East of England</option>
+                            <option value="Greater London">Greater London</option>
+                            <option value="North East">North East</option>
                             <option value="North West">North West</option>
+                            <option value="Northern Ireland">Northern Ireland</option>
+                            <option value="Scotland">Scotland</option>
                             <option value="South East">South East</option>
+                            <option value="South West">South West</option>
+                            <option value="Wales">Wales</option>
+                            <option value="West Midlands">West Midlands</option>
+                            <option value="Yorkshire and the Humber">Yorkshire and the Humber</option>
                         </select>
 
                         <NavLink to="chart">
@@ -111,7 +126,9 @@ function MainInfo() {
                     </div>
                 </div>
                 <div className="w-75 mx-4">
-                    {datainfo.data ? <DisplayData /> : <></>}
+                    {datainfo.data ? <DisplayData /> : <>
+                                                        {noDataAvailable ? <h5 className="text-white">There is no data available for this region.</h5> : <></>}
+                                                        </>}
                     <Routes>
                         <Route path="covid-tracker" element={<></>} />
                         <Route path="chart" element={datainfo.data ? <GraphData /> : <></>} />
