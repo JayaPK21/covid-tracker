@@ -7,8 +7,11 @@ import { Line } from "react-chartjs-2"; // Importing the Line component from the
 import { useSelector } from 'react-redux';
 import { format } from 'date-fns';
 
-// Setting up the labels for the x-axis of the chart
+// Initializing the labels for the x-axis of the chart
 const labels = [];
+
+Chart.defaults.color = '#FFF';
+Chart.defaults.backgroundColor = '#FFF';
 
 // Setting up the data for the chart, including the labels and datasets
 const dataChart = {
@@ -16,11 +19,12 @@ const dataChart = {
   datasets: [
     {
       label: "Daily Cases", // Setting up the label for the dataset
-      backgroundColor: "rgb(255, 99, 132)", // Setting up the background color for the dataset
-      borderColor: "rgb(255, 99, 132)", // Setting up the border color for the dataset
-      data: [0, 10, 5, 2, 20, 30, 45], // Setting up the data for the dataset
+      borderColor: "rgb(255, 99, 132)", 
+      data: [], // Initializing the data for the dataset
     },
   ],
+
+  
 };
 
 // Defining the LineChart component

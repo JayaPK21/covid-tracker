@@ -83,6 +83,7 @@ function MainInfo() {
         // Setting the value of data to initial value
         dispatch(setDataInfo({ ...datainfo, data: null }));
         setNoDataAvailable(false);
+        
         main().catch(err => {
             console.error(err);
             process.exitCode = 1;
@@ -118,11 +119,15 @@ function MainInfo() {
                             <option value="Yorkshire and the Humber">Yorkshire and the Humber</option>
                         </select>
 
-                        <NavLink to="chart">
-                            <button type="button" onClick={handleData} className="btn btn-light">
-                                Get Data
-                            </button>
-                        </NavLink>
+                        {
+                            // The 'Get Data' button is displayed only when a region is selected from list.
+                            selectRegion ? <NavLink to="chart">
+                                <button type="button" onClick={handleData} className="btn btn-info">
+                                    Get Data
+                                </button>
+                            </NavLink> : <></>
+                        }
+                        
                     </div>
                 </div>
                 <div className="w-75 mx-4">

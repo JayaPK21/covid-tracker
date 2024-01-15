@@ -4,7 +4,7 @@ import LineChart from "./LineChart";
 function GraphData() {
     return(
         <div className="p-2 px-5">
-            <p className=" text-white">The following graph represents daily cases of Covid-19 over a one month period.</p>
+            <h5 className=" text-white">The following graph represents daily cases of Covid-19 over a one month period.</h5>
             <LineChart />
         </div>
     );
