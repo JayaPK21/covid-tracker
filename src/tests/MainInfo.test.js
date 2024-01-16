@@ -7,16 +7,9 @@ import { Provider } from 'react-redux';
 
 import axios from "axios";
 
-// Mock the ResizeObserver
-// jest.mock('resize-observer', () => ({
-//     __esModule: true,
-//     default: jest.fn().mockImplementation(() => ({
-//       observe: jest.fn(),
-//       unobserve: jest.fn(),
-//       disconnect: jest.fn(),
-//     })),
-// }));
-
+jest.mock('../components/LineChart', () => {
+    return () => <></>; // Mock the LineChart component to return an empty value for tests.
+});
 
 jest.mock("axios");
 
@@ -94,14 +87,11 @@ describe('Tests to check the region selection', () => {
 
 
 describe('API Tests', () => {
-    it('First Test', async () => {
-    //     jest.mock('../components/GraphData', () => {
-    //         return () => null; // Mock the component to return null
-    //       });
+    it('The data is displayed when the API returns data', async () => {
         
         render(<Provider store={store}><MainInfo /></Provider>);
         const regionSelection = screen.getByTestId("regionSelection");
-        fireEvent.change(regionSelection, { target: { value: 'North West' } });
+        fireEvent.change(regionSelection, { target: { value: 'South West' } });
 
         axios.get.mockResolvedValue({"data": dummyResult});
 
@@ -111,6 +101,41 @@ describe('API Tests', () => {
         
         const dataDisplayed = await waitFor(() => screen.getByTestId("dataPageTabs"));
         expect(dataDisplayed).toBeInTheDocument();
+    });
+
+    it('An alternative text is displayed when no data is returned for region', async () => {
+        
+        render(<Provider store={store}><MainInfo /></Provider>);
+        const regionSelection = screen.getByTestId("regionSelection");
+        fireEvent.change(regionSelection, { target: { value: 'Wales' } });
+
+        axios.get.mockResolvedValue({}); //Mock value represents empty response for the region.
+
+        act(() => {
+            fireEvent.click(screen.getByTestId('getData'));
+        });
+        
+        const noDataDisplayed = await waitFor(() => screen.getByText("There is no data available for this region."));
+        expect(noDataDisplayed).toBeInTheDocument();
+    });
+
+    it('Checks if the correct number of rows is displayed in the data table', async () => {
+        
+        render(<Provider store={store}><MainInfo /></Provider>);
+        const regionSelection = screen.getByTestId("regionSelection");
+        fireEvent.change(regionSelection, { target: { value: 'South West' } });
+
+        axios.get.mockResolvedValue({"data": dummyResult});
+
+        act(() => {
+            fireEvent.click(screen.getByTestId('getData'));
+        });
+
+        const tableDisplayed = await waitFor(() => screen.getByText("Table"));
+        fireEvent.click(tableDisplayed);
+        
+        const dataTableRows = await waitFor(() => screen.getAllByTestId("rowData"));
+        expect(dataTableRows).toHaveLength(4);
     });
 
 });
