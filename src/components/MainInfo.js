@@ -65,7 +65,7 @@ function MainInfo() {
             };
 
         const result = await getData(apiParams);
-
+        console.log("Result: "+ result);
         if(!result){
             setNoDataAvailable(true);
             return;
@@ -103,6 +103,7 @@ function MainInfo() {
                             aria-label="Default select example"
                             value={selectRegion}
                             onChange={(event) => handleRegionChange(event)}
+                            data-testid="regionSelection"
                             >
                             <option defaultValue=""></option>
                             <option value="East Midlands">East Midlands</option>
@@ -122,7 +123,10 @@ function MainInfo() {
                         {
                             // The 'Get Data' button is displayed only when a region is selected from list.
                             selectRegion ? <NavLink to="chart">
-                                <button type="button" onClick={handleData} className="btn btn-info">
+                                <button type="button" 
+                                        onClick={handleData} 
+                                        className="btn btn-info"
+                                        data-testid="getData">
                                     Get Data
                                 </button>
                             </NavLink> : <></>
@@ -135,6 +139,7 @@ function MainInfo() {
                                                         {noDataAvailable ? <h5 className="text-white">There is no data available for this region.</h5> : <></>}
                                                         </>}
                     <Routes>
+                        <Route path="/" element={<></>} />
                         <Route path="covid-tracker" element={<></>} />
                         <Route path="chart" element={datainfo.data ? <GraphData /> : <></>} />
                         <Route path="table" element={<TableData />} />

@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 function DisplayData() {
     return(
         <>
-            <ul className="nav nav-pills">
+            <ul data-testid="dataPageTabs" className="nav nav-pills">
                 <li className="nav-item">
                     <NavLink to="chart" className="nav-link" activeclassname="active">
                         Graph

@@ -34,7 +34,7 @@ function TableData() {
                             datainfo.data.map((record, index) => {
                                 if(record.dailyCases >= 100){
                                     return (
-                                        <tr key={index} className="table-warning" >
+                                        <tr key={index} data-testid="rowData" className="table-warning" >
                                             <th scope="row">{formatDate(record.date)}</th>
                                             <td>{record.name}</td>
                                             <td>{record.dailyCases}</td>
@@ -43,7 +43,7 @@ function TableData() {
                                     )
                                 } else {
                                     return (
-                                        <tr key={index} >
+                                        <tr key={index} data-testid="rowData">
                                             <th scope="row">{formatDate(record.date)}</th>
                                             <td>{record.name}</td>
                                             <td>{record.dailyCases}</td>
